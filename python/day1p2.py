@@ -11,16 +11,20 @@ def read_lists_from_file(filename):
     
     return list1, list2
 
-def calculate_total_distance(list1, list2):
-    sorted_list1 = sorted(list1)
-    sorted_list2 = sorted(list2)
+def calculate_similarity_score(list1, list2):
+    total_score = 0
     
-    total_distance = 0
-    for num1, num2 in zip(sorted_list1, sorted_list2):
-        distance = abs(num1 - num2)
-        total_distance += distance
+    right_freq = {}
+    for num in list2:
+        right_freq[num] = right_freq.get(num, 0) + 1
     
-    return total_distance
+    for num in list1:
+        count_in_right = right_freq.get(num, 0)
+
+        score_contribution = num * count_in_right
+        total_score += score_contribution
+    
+    return total_score
 
 def main():
     filename = "data/day1p1.txt"
@@ -29,11 +33,10 @@ def main():
     if not list1 or not list2:
         raise ValueError("No valid number pairs found in the file")
     
-    if len(list1) != len(list2):
-        raise ValueError("Lists must be of equal length")
+    print(f"Number of pairs read: {len(list1)}")
     
-    result = calculate_total_distance(list1, list2)
-    print(f"Total distance between the lists: {result}")
-
+    similarity_score = calculate_similarity_score(list1, list2)
+    print(f"\nFinal similarity score: {similarity_score}")
+    
 if __name__ == "__main__":
     main()
